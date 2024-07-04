@@ -54,4 +54,7 @@ async function commandHandler(command, arg) {
   });
 }
 
-await commandHandler("daily");
+if (GM_getValue("autoVote_daily", false) == true) {
+  GM_deleteValue("autoVote_daily");
+  await commandHandler("daily");
+}
