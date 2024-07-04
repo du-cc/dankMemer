@@ -95,6 +95,3 @@ if (voteBtn.hasAttribute("disabled")) {
 }
 
 
-GM_setValue("autoVote_daily", true);
-
-window.open("https://discord.com/channels/879243001774358528/1253592050260119593", "_blank");
