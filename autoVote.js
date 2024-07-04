@@ -52,7 +52,6 @@ function vote() {
       const focusEvent = new Event("focus");
       window.dispatchEvent(focusEvent);
 
-      // Create and dispatch visibilitychange event
       const visibilityChangeEvent = new Event("visibilitychange");
       document.dispatchEvent(visibilityChangeEvent);
     };
@@ -94,3 +93,8 @@ if (voteBtn.hasAttribute("disabled")) {
     voteBtn.click();
   }
 }
+
+
+GM_setValue("autoVote_daily", true);
+
+window.open("https://discord.com/channels/879243001774358528/1253592050260119593", "_blank");
