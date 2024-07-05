@@ -1,8 +1,13 @@
 const voteBtn = document.querySelector('button[variant="success"]');
 var state = 0;
 
+
 function vote() {
-  state = 1;
+  if (state == 1) {
+    state = 2;
+    observer.observe(voteBtn, { attributes: true });
+    return;
+  }
   observer.disconnect();
   voteBtn.click();
 
@@ -59,6 +64,7 @@ function vote() {
     setInterval(forceFocus, 100);
    
     setTimeout(() => {
+      state = 1;
       observer.observe(voteBtn, { attributes: true });
     }, 1000);
 
@@ -89,9 +95,16 @@ if (voteBtn.hasAttribute("disabled")) {
 } else {
   if (state == 0) {
     vote();
-  } else {
+  } else if (state == 1) {
+    const selBtn = document.querySelectorAll('button[variant="primary"]')[-1];
+    selBtn.click();
+    vote();
+  } else if (state == 2) {
     voteBtn.click();
   }
 }
 
 
+// GM_setValue("autoVote_daily", true);
+
+// window.open("https://discord.com/channels/879243001774358528/1253592050260119593", "_blank");
