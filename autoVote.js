@@ -1,13 +1,6 @@
 const voteBtn = document.querySelector('button[variant="success"]');
-var state = 0;
-
 
 function vote() {
-  if (state == 1) {
-    state = 2;
-    observer.observe(voteBtn, { attributes: true });
-    return;
-  }
   observer.disconnect();
   voteBtn.click();
 
@@ -28,50 +21,28 @@ function vote() {
     });
   }, 3500);
 
-  setTimeout(() => {
-    const selBtn = document.querySelectorAll('button[variant="primary"]');
+  Object.defineProperty(document, "hidden", {
+    get: function () {
+      return false;
+    },
+  });
 
-    const clickAllButtons = (buttons) => {
-      buttons.forEach((btn) => {
-        requestAnimationFrame(() => {
-          btn.click();
-        });
-      });
-    };
+  Object.defineProperty(document, "visibilityState", {
+    get: function () {
+      return "visible";
+    },
+  });
 
-    clickAllButtons(selBtn);
+  const forceFocus = () => {
+    const focusEvent = new Event("focus");
+    window.dispatchEvent(focusEvent);
 
-    Object.defineProperty(document, "hidden", {
-      get: function () {
-        return false;
-      },
-    });
+    const visibilityChangeEvent = new Event("visibilitychange");
+    document.dispatchEvent(visibilityChangeEvent);
+  };
 
-    Object.defineProperty(document, "visibilityState", {
-      get: function () {
-        return "visible";
-      },
-    });
-
-    const forceFocus = () => {
-      const focusEvent = new Event("focus");
-      window.dispatchEvent(focusEvent);
-
-      const visibilityChangeEvent = new Event("visibilitychange");
-      document.dispatchEvent(visibilityChangeEvent);
-    };
-
-    setInterval(forceFocus, 100);
-   
-    setTimeout(() => {
-      state = 1;
-      observer.observe(voteBtn, { attributes: true });
-    }, 1000);
-
-  }, 4000);
-
+  setInterval(forceFocus, 100);
 }
-
 
 const observer = new MutationObserver((mutationsList) => {
   for (let mutation of mutationsList) {
@@ -84,7 +55,7 @@ const observer = new MutationObserver((mutationsList) => {
   }
 });
 
-if (document.body.innerText.includes("AdBlocker")) {
+if (document.body.innerHTML.includes("AdBlocker")) {
   window.location.reload();
 } else if (document.body.innerText.includes("You can vote in")) {
   console.log("You have already voted");
@@ -93,17 +64,8 @@ if (document.body.innerText.includes("AdBlocker")) {
 if (voteBtn.hasAttribute("disabled")) {
   observer.observe(voteBtn, { attributes: true });
 } else {
-  if (state == 0) {
-    vote();
-  } else if (state == 1) {
-    const selBtn = document.querySelectorAll('button[variant="primary"]')[-1];
-    selBtn.click();
-    vote();
-  } else if (state == 2) {
-    voteBtn.click();
-  }
+  vote();
 }
-
 
 // GM_setValue("autoVote_daily", true);
 
