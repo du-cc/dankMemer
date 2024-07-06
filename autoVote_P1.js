@@ -89,31 +89,4 @@
     }
   }
 
-  const originalFetch = window.fetch;
-  window.fetch = async function (input, init) {
-    const method = (init && init.method) || "GET";
-    const body = init && init.body;
-
-    if (input.includes("/api/freemium") && method === "POST") {
-      if (body) {
-        if (typeof body === "string") {
-          try {
-            const parsedBody = JSON.parse(body);
-            if (parsedBody.token) {
-              console.log("Token found:", parsedBody.token);
-              // You can handle the token here as needed
-              // For example, store it or alert it
-              alert("Token found: " + parsedBody.token);
-            } else {
-              console.log("No token found");
-            }
-          } catch (error) {
-            console.error("Error parsing body:", error);
-          }
-        }
-      }
-    }
-
-    return originalFetch.apply(this, arguments);
-  };
 })();
