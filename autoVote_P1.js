@@ -83,9 +83,9 @@
             state = 4;
             freemiumAPI("block");
             voteBtn.click();
-          }, 10);
-        }, 10);
-      }, 10);
+          }, 100);
+        }, 100);
+      }, 100);
     }
   }
 
