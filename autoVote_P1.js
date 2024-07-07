@@ -16,6 +16,8 @@
 
   var state = 0;
 
+  var nBlock = 0;
+
   const voteBtn = document.querySelector('button[variant="success"]');
 
   const voteObserver = new MutationObserver((mutationsList) => {
@@ -42,7 +44,13 @@
       GM_webRequest(
         [{ selector: "https://dankmemer.lol/api/freemium", action: "cancel" }],
         (info, message, details) => {
-          console.log("request blocked:", info, message, details);
+          if (nBlock > 3) {
+            freemiumAPI("allow");
+            nBlock = 0;
+          } else {
+            console.log("request blocked:", info, message, details);
+            nBlock++;
+          }
         }
       );
     } else if (action === "allow") {
@@ -67,6 +75,7 @@
     }
 
     if (state === 1) {
+      freemiumAPI("block");
       voteObserver.disconnect();
       state = 2;
       voteBtn.click();
@@ -81,12 +90,10 @@
           claimBtn.click();
           setTimeout(() => {
             state = 4;
-            freemiumAPI("block");
             voteBtn.click();
           }, 100);
         }, 100);
       }, 100);
     }
   }
-
 })();
