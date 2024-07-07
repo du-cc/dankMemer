@@ -40,22 +40,9 @@
                     picked: [0, 1, 2],
                     token: parsedBody.token,
                   }),
-                })
-                  .then((res) => res.json())
-                  .then((data) => {
-                    console.log("Vote response:", data);
-
-                    if (data.success) {
-                      debounce = true;
-                      alert("Vote success");
-                      window.location.reload();
-                    } else {
-                      alert("Vote failed");
-                    }
-                  })
-                  .catch((error) => {
-                    console.error("Error voting:", error);
-                  });
+                }).catch((error) => {
+                  console.error("Error voting:", error);
+                });
               }, 1000);
             } else {
               console.log("No token found");
